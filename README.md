@@ -37,7 +37,7 @@
 
 ---
 
-## 第一章：Next.js 基础 — 项目搭建与核心概念
+## [第一章：Next.js 基础 — 项目搭建与核心概念](/chapters/01-foundation)
 
 **学习目标：** 理解 Next.js 是什么，搭建第一个项目，掌握目录结构
 
@@ -48,7 +48,7 @@
 - 1.5 TypeScript 配置与严格模式
 - 1.6 第一个页面：Hello World 到动态页面
 
-## 第二章：路由系统 — App Router 详解
+## [第二章：路由系统 — App Router 详解](/chapters/02-routing)
 
 **学习目标：** 精通文件系统路由，掌握 layouts、动态路由、路由组
 
@@ -61,7 +61,7 @@
 - 2.7 并行路由与拦截路由：`@modal` / `(.)photo`
 - 2.8 路由处理器：`route.ts` (GET/POST/PUT/DELETE)
 
-## 第三章：渲染策略 — SSR / SSG / ISR / CSR
+## [第三章：渲染策略 — SSR / SSG / ISR / CSR](/chapters/03-rendering)
 
 **学习目标：** 理解四种渲染模式的区别、使用场景与底层原理
 
@@ -73,7 +73,7 @@
 - 3.6 部分预渲染 (PPR)：实验性特性
 - 3.7 选择渲染策略的决策树
 
-## 第四章：数据获取 — Server Components 与缓存策略
+## [第四章：数据获取 — Server Components 与缓存策略](/chapters/04-data-fetching)
 
 **学习目标：** 掌握在服务端和客户端获取数据的所有方式
 
@@ -86,7 +86,7 @@
 - 4.7 客户端数据获取：`useEffect` / SWR / TanStack Query
 - 4.8 乐观更新 (Optimistic Updates) 与 `useOptimistic`
 
-## 第五章：服务端操作 — Server Actions 与 API 路由
+## [第五章：服务端操作 — Server Actions 与 API 路由](/chapters/05-server-actions)
 
 **学习目标：** 学会处理表单、数据变更和构建 API
 
@@ -98,7 +98,7 @@
 - 5.6 文件上传处理
 - 5.7 Webhooks 与外部 API 集成
 
-## 第六章：状态管理与客户端交互
+## [第六章：状态管理与客户端交互](/chapters/06-state-management)
 
 **学习目标：** 管理客户端状态，处理用户交互
 
@@ -110,7 +110,7 @@
 - 6.6 动画与过渡：`startTransition` / Framer Motion
 - 6.7 第三方客户端的集成模式
 
-## 第七章：样式方案 — CSS Modules / Tailwind / CSS-in-JS
+## [第七章：样式方案 — CSS Modules / Tailwind / CSS-in-JS](/chapters/07-styling)
 
 **学习目标：** 掌握 Next.js 中的各种样式方案及最佳实践
 
@@ -122,7 +122,7 @@
 - 7.6 字体优化：`next/font`
 - 7.7 图片优化：`next/image`
 
-## 第八章：认证与中间件
+## [第八章：认证与中间件](/chapters/08-authentication)
 
 **学习目标：** 实现完整的用户认证与授权系统
 
@@ -134,7 +134,7 @@
 - 8.6 角色与权限控制 (RBAC)
 - 8.7 安全的 Cookie 与会话管理
 
-## 第九章：数据库集成与 ORM
+## [第九章：数据库集成与 ORM](/chapters/09-database)
 
 **学习目标：** 在 Next.js 中集成数据库，掌握数据建模与迁移
 
@@ -147,7 +147,7 @@
 - 9.7 数据库迁移与种子数据
 - 9.8 生产环境连接池与边缘兼容性
 
-## 第十章：性能优化与部署最佳实践
+## [第十章：性能优化与部署最佳实践](/chapters/10-performance)
 
 **学习目标：** 测量、分析和优化 Next.js 应用性能
 
@@ -161,7 +161,7 @@
 - 10.8 部署方案：Vercel / Docker / 自托管
 - 10.9 CI/CD 流水线搭建
 
-## 第十一章：测试策略 — 单元 / 集成 / E2E 测试
+## [第十一章：测试策略 — 单元 / 集成 / E2E 测试](/chapters/11-testing)
 
 **学习目标：** 建立完整的测试体系
 
@@ -174,7 +174,7 @@
 - 11.7 快照测试与视觉回归测试
 - 11.8 测试覆盖率与 CI 集成
 
-## 第十二章：实战项目 — 全栈电商平台
+## [第十二章：实战项目 — 全栈电商平台](/chapters/12-practical-project)
 
 **学习目标：** 综合运用所有知识，构建完整项目
 
@@ -186,7 +186,7 @@
 - 12.6 后台管理系统
 - 12.7 性能优化与部署上线
 
-## 第十三章：补充主题 — 进阶知识全景
+## [第十三章：补充主题 — 进阶知识全景](/chapters/13-advanced-topics)
 
 **学习目标：** 补全前 12 章未覆盖的关键知识点
 
@@ -205,7 +205,7 @@
 - 13.13 Edge Runtime 详解：能力边界、适用场景
 - 13.13 配置文件完整参考：`next.config.ts` 全选项
 
-## 第十四章：Next.js 15 → 16 迁移指南
+## [第十四章：Next.js 15 → 16 迁移指南](/chapters/14-migration-v16)
 
 **学习目标：** 全面掌握 16.x 相比 15.x 的变更，安全迁移项目
 
@@ -232,3 +232,41 @@
 | 第9周+ | 第13-14章 | 进阶补充 + 16.x 迁移 |
 
 > 详细章节内容请查看 `chapters/` 目录下的对应文件。
+
+---
+
+## 环境
+
+- Node.js >= 20
+- 包管理：npm
+
+## 开发命令
+
+```bash
+# 安装依赖
+npm install
+
+# 初始化数据库（含种子数据）
+npx prisma db push
+npx tsx src/lib/seed.ts
+
+# 启动开发服务器
+npm run dev
+# → http://localhost:3000
+
+# 生产构建
+npm run build
+npm start
+```
+
+## 电商实战项目
+
+启动开发服务器后访问 `/shop` 进入 ShopNext 商城。
+
+### 管理员账号
+
+| 邮箱 | 密码 |
+|------|------|
+| admin@shopnext.com | admin123456 |
+
+登录方式：访问 `/login` 或 `/admin`（会自动跳转登录页）。

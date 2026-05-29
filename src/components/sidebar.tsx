@@ -70,6 +70,40 @@ export function Sidebar({ chapters }: { chapters: ChapterMeta[] }) {
           </ul>
 
           <p className="mb-3 mt-6 px-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+            实战项目
+          </p>
+          <ul className="space-y-0.5">
+            <li>
+              <Link
+                href="/shop"
+                onClick={() => setOpen(false)}
+                className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                  pathname.startsWith('/shop') || pathname.startsWith('/login') || pathname.startsWith('/admin')
+                    ? 'bg-brand/10 text-brand font-medium'
+                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+                }`}
+              >
+                <span className="mr-2 text-xs text-gray-400">Shop</span>
+                ShopNext 商城
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/admin"
+                onClick={() => setOpen(false)}
+                className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                  pathname.startsWith('/admin')
+                    ? 'bg-brand/10 text-brand font-medium'
+                    : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
+                }`}
+              >
+                <span className="mr-2 text-xs text-gray-400">Admin</span>
+                管理后台
+              </Link>
+            </li>
+          </ul>
+
+          <p className="mb-3 mt-6 px-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
             交互演示
           </p>
           <ul className="space-y-0.5">

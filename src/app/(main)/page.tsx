@@ -29,10 +29,10 @@ export default function HomePage() {
               开始学习 <ArrowRight size={18} />
             </Link>
             <Link
-              href={`/chapters/${chapters[chapters.length - 1]?.slug}`}
+              href="/shop"
               className="inline-flex items-center gap-2 rounded-lg border px-5 py-2.5 font-medium hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
-              实战项目
+              <Rocket size={18} /> 实战项目
             </Link>
             <Link
               href="/playground"

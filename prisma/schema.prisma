@@ -1,0 +1,176 @@
+// ============================================================================
+// Prisma 数据库 Schema 定义文件
+// ============================================================================
+// 本文件定义了整个电商应用的数据库模型结构，包括：
+// - 用户系统（User、Session、Account、Verification）
+// - 商品系统（Product、Order、OrderItem、Review）
+//
+// 使用 SQLite 作为数据库引擎，通过 Prisma ORM 管理数据迁移和查询。
+// ============================================================================
+
+// Prisma Client 生成器配置：使用 @prisma/client JS 库
+generator client {
+  provider = "prisma-client-js"
+}
+
+// 数据源配置：SQLite 数据库，连接字符串从环境变量 DATABASE_URL 读取
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------------------------------
+// User 用户模型
+// ----------------------------------------------------------------------------
+// 存储注册用户的核心信息，包括认证凭据、角色和关联数据。
+// 关系：一对多 → Order（订单）、Review（评价）、Session（会话）、Account（第三方账号）
+model User {
+  id            String    @id @default(cuid())   // 使用 CUID 生成全局唯一主键
+  name          String                            // 用户姓名
+  email         String    @unique                // 邮箱，全局唯一，用于登录
+  emailVerified Boolean   @default(false)        // 邮箱是否已验证
+  image         String?                           // 用户头像 URL，可选
+  password      String?                           // 加密后的密码，可选（支持第三方登录无密码场景）
+  role          String    @default("USER")        // 角色：USER（普通用户）或 ADMIN（管理员）
+  createdAt     DateTime  @default(now())         // 创建时间，自动填充
+  updatedAt     DateTime  @updatedAt              // 更新时间，每次修改自动更新
+
+  orders        Order[]                           // 该用户的所有订单
+  reviews       Review[]                         // 该用户的所有评价
+  sessions      Session[]                         // 该用户的所有登录会话
+  accounts      Account[]                         // 该用户的第三方登录账号绑定
+}
+
+// ----------------------------------------------------------------------------
+// Session 会话模型
+// ----------------------------------------------------------------------------
+// 管理用户登录会话，记录会话令牌、过期时间及客户端信息。
+model Session {
+  id          String   @id @default(cuid())       // 会话唯一标识
+  userId      String                              // 所属用户 ID
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // 关联用户，级联删除
+  token       String   @unique                    // 会话令牌，全局唯一
+  expiresAt   DateTime                            // 会话过期时间
+  ipAddress   String?                             // 登录 IP 地址，可选
+  userAgent   String?                             // 用户浏览器 User-Agent，可选
+  createdAt   DateTime @default(now())            // 会话创建时间
+  updatedAt   DateTime @updatedAt                 // 会话更新时间
+}
+
+// ----------------------------------------------------------------------------
+// Account 第三方账号模型
+// ----------------------------------------------------------------------------
+// 存储用户通过 OAuth 等第三方登录方式绑定的账号信息。
+// 复合唯一约束：同一 provider 下的 accountId 唯一。
+model Account {
+  id                    String   @id @default(cuid()) // 绑定记录唯一标识
+  userId                String                        // 所属用户 ID
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade) // 关联用户，级联删除
+  accountId             String                        // 第三方平台的用户 ID
+  providerId            String                        // 第三方平台标识（如 github、google）
+  accessToken           String?                       // OAuth 访问令牌
+  refreshToken          String?                       // OAuth 刷新令牌
+  accessTokenExpiresAt  DateTime?                     // 访问令牌过期时间
+  refreshTokenExpiresAt DateTime?                     // 刷新令牌过期时间
+  scope                 String?                       // OAuth 授权范围
+  idToken               String?                       // OpenID Connect ID 令牌
+  password              String?                       // 可选的密码字段
+  createdAt             DateTime @default(now())      // 记录创建时间
+  updatedAt             DateTime @updatedAt           // 记录更新时间
+
+  @@unique([providerId, accountId])                   // 同一平台下账号唯一
+}
+
+// ----------------------------------------------------------------------------
+// Verification 验证模型
+// ----------------------------------------------------------------------------
+// 用于邮箱验证、密码重置等需要发送验证码/链接的场景。
+model Verification {
+  id         String   @id @default(cuid())            // 验证记录唯一标识
+  identifier String                                   // 验证目标标识（如邮箱地址）
+  value      String                                   // 验证码或令牌值
+  expiresAt  DateTime                                 // 验证过期时间
+  createdAt  DateTime @default(now())                 // 创建时间
+  updatedAt  DateTime @updatedAt                      // 更新时间
+}
+
+// ----------------------------------------------------------------------------
+// Product 商品模型
+// ----------------------------------------------------------------------------
+// 商品目录的核心模型，包含名称、定价、库存、分类等信息。
+// 索引：category（分类查询优化）、published（已发布商品筛选优化）
+model Product {
+  id           String      @id @default(cuid())       // 商品唯一标识
+  name         String                                 // 商品名称
+  slug         String      @unique                    // URL 友好的唯一标识符
+  description  String                                 // 商品详细描述
+  price        Float                                  // 商品现价
+  comparePrice Float?                                 // 商品原价/对比价（用于显示折扣），可选
+  images       String      @default("[]")             // 商品图片列表，以 JSON 数组字符串存储
+  category     String                                 // 商品分类
+  stock        Int         @default(0)                // 库存数量，默认 0
+  featured     Boolean     @default(false)            // 是否为推荐/精选商品
+  published    Boolean     @default(false)            // 是否已发布上架
+  createdAt    DateTime    @default(now())            // 创建时间
+  updatedAt    DateTime    @updatedAt                 // 更新时间
+
+  orderItems   OrderItem[]                            // 关联的订单项
+  reviews      Review[]                               // 该商品的用户评价
+
+  @@index([category])                                 // 按分类查询索引
+  @@index([published])                                // 按发布状态查询索引
+}
+
+// ----------------------------------------------------------------------------
+// Order 订单模型
+// ----------------------------------------------------------------------------
+// 记录用户提交的订单，包含总金额、状态、支付方式等。
+// 索引：userId（用户订单查询优化）、status（订单状态筛选优化）
+model Order {
+  id              String      @id @default(cuid())    // 订单唯一标识
+  userId          String                              // 下单用户 ID
+  user            User        @relation(fields: [userId], references: [id]) // 关联用户
+  total           Float                               // 订单总金额
+  status          String      @default("PENDING")     // 订单状态：PENDING/PAID/PROCESSING/SHIPPED/DELIVERED/CANCELLED
+  paymentMethod   String      @default("simulated")    // 支付方式，默认为模拟支付
+  stripeSessionId String?                             // Stripe 支付会话 ID，可选
+  createdAt       DateTime    @default(now())          // 下单时间
+  updatedAt       DateTime    @updatedAt               // 订单更新时间
+
+  items           OrderItem[]                          // 订单中的商品项
+
+  @@index([userId])                                   // 按用户 ID 查询订单的索引
+  @@index([status])                                   // 按订单状态筛选的索引
+}
+
+// ----------------------------------------------------------------------------
+// OrderItem 订单项模型
+// ----------------------------------------------------------------------------
+// 订单中的单个商品条目，记录商品、数量、购买时的单价。
+model OrderItem {
+  id        String  @id @default(cuid())               // 订单项唯一标识
+  orderId   String                                     // 所属订单 ID
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade) // 关联订单，级联删除
+  productId String                                     // 商品 ID
+  product   Product @relation(fields: [productId], references: [id]) // 关联商品
+  quantity  Int                                        // 购买数量
+  price     Float                                      // 购买时的商品单价（快照）
+}
+
+// ----------------------------------------------------------------------------
+// Review 商品评价模型
+// ----------------------------------------------------------------------------
+// 用户对已购买商品的评分和评论。
+// 复合唯一约束：同一用户对同一商品只能评价一次。
+model Review {
+  id        String   @id @default(cuid())              // 评价唯一标识
+  productId String                                     // 被评价商品 ID
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade) // 关联商品，级联删除
+  userId    String                                     // 评价用户 ID
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade) // 关联用户，级联删除
+  rating    Int                                        // 评分（通常为 1-5 星）
+  comment   String?                                    // 评价文字内容，可选
+  createdAt DateTime @default(now())                   // 评价时间
+
+  @@unique([productId, userId])                        // 每个用户对每个商品只能有一条评价
+}
