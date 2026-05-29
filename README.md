@@ -1,6 +1,6 @@
 # Next.js 从 0 到精通 — 全栈学习路线
 
-> 适用版本：Next.js 15+ (App Router)，React 19+
+> 适用版本：Next.js 16.x (App Router)，React 19.2+
 > 前置知识：HTML / CSS / JavaScript 基础，React 基础（了解 JSX、组件、hooks）
 > 学习周期：建议 8-12 周，每章 3-7 天
 
